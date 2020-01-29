@@ -42,6 +42,7 @@ func main() {
 	reg.MustRegister(
 		prometheus.NewProcessCollector(prometheus.ProcessCollectorOpts{}),
 		prometheus.NewGoCollector(),
+		prometheus.NewBuildInfoCollector(),
 		kc,
 	)
 
