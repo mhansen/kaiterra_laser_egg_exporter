@@ -67,15 +67,25 @@ func (kc kaiterraCollector) Collect(ch chan<- prometheus.Metric) {
 	q := url.Values{}
 	q.Add("key", *apiKey)
 	req.URL.RawQuery = q.Encode()
-	log.Printf(req.URL.String())
 	resp, err := kc.c.Do(req)
 	if err != nil {
+		log.Printf("request to %v failed: %v", req.URL.String(), err)
 		return
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode != 200 {
+		log.Printf("got non-200 code: %v, %v", resp.StatusCode, resp.Status)
+		return
+	}
+
 	decoded := JSONResponse{}
-	json.NewDecoder(resp.Body).Decode(&decoded)
-	log.Printf("%+v", decoded)
+	err = json.NewDecoder(resp.Body).Decode(&decoded)
+	if err != nil {
+		log.Printf("couldn't parse json: %v", err)
+		return
+	}
+
 	ch <- prometheus.MustNewConstMetric(
 		pmDesc,
 		prometheus.GaugeValue,
@@ -111,7 +121,8 @@ func (kc kaiterraCollector) Collect(ch chan<- prometheus.Metric) {
 	t, err := time.Parse(time.RFC3339, decoded.AQI.TS)
 	if err != nil {
 		log.Printf("Couldn't parse date: %v", decoded.AQI.TS)
-		return
+		// It's fine, don't return, let's just move on and output t=0
+		// so we always have the same set of metrics.
 	}
 	ch <- prometheus.MustNewConstMetric(
 		prometheus.NewDesc(
