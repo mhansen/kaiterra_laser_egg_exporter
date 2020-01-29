@@ -13,7 +13,8 @@ import (
 )
 
 var (
-	addr       = flag.String("addr", ":8000", "http address to listen on")
+	// 9660 registered on https://github.com/prometheus/prometheus/wiki/Default-port-allocations
+	addr       = flag.String("addr", ":9660", "http address to listen on")
 	apiKey     = flag.String("api_key", "", "API key for Kaiterra")
 	deviceUUID = flag.String("device_uuid", "", "UUID for Device")
 
