@@ -29,3 +29,20 @@ Example usage:
     # TYPE kaiterra_timestamp_seconds gauge
     kaiterra_timestamp_seconds 1.580291945e+09
 
+
+Example docker-compose.yml:
+
+    version: '3.4'
+    services:
+      kaiterra:
+        image: markhnsn/kaiterra_laser_egg_exporter
+        restart: always
+        ports:
+          - "9660:9660"
+        command: [
+          "--addr", ":9660",
+          "--api_key", "kOpAgVMnz2zM5l6XKQwv4JmUEvopnmUewFKXQ0Wvf9Su72a9",
+          "--device_uuid", "3d6d04a2-ba9f-11e6-9598-0800200c9a66",
+        ]
+        volumes:
+          - /etc/ssl/certs:/etc/ssl/certs:ro
