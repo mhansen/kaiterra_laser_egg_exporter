@@ -2,7 +2,7 @@
 
 A prometheus.io exporter for Kaiterra Laser Egg Air Quality / Particulate Matter Sensors.
 
-Pushed to Docker Hub at https://hub.docker.com/r/markhnsn/kaiterra_laser_egg_exporter
+Pushed to [Docker Hub](https://hub.docker.com/r/markhnsn/kaiterra_laser_egg_exporter)
 
 Get an API Key at https://dashboard.kaiterra.cn/.
 
@@ -46,3 +46,13 @@ Example docker-compose.yml:
         ]
         volumes:
           - /etc/ssl/certs:/etc/ssl/certs:ro
+
+Example prometheus.yml:
+
+    scrape_configs:
+      - job_name: 'kaiterra'
+        static_configs:
+          - targets:
+            - 'kaiterra:9660'
+            labels:
+              location: 'Kaiterra'
