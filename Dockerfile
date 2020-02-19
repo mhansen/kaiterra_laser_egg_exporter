@@ -1,13 +1,26 @@
-FROM golang:alpine as builder
+# Use the official Golang image to create a build artifact.
+# This is based on Debian and sets the GOPATH to /go.
+# https://hub.docker.com/_/golang
+FROM golang:1.13 as builder
 
-RUN apk update && apk add git && apk add ca-certificates
+# Create and change to the app directory.
+WORKDIR /app
 
-WORKDIR /root
-COPY go.mod go.sum *.go /root/
-RUN go get -d -v
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm GOARM=6 go build -a kaiterra_laser_egg_exporter.go
+# Retrieve application dependencies.
+# This allows the container build to reuse cached dependencies.
+COPY go.* ./
+RUN go mod download
+
+# Copy local code to the container image.
+COPY *.go ./
+
+# Build the binary.
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -mod=readonly -v -a kaiterra_laser_egg_exporter.go
 
 FROM scratch
-COPY --from=builder /root/kaiterra_laser_egg_exporter /root/
+# Copy the binary to the production image from the builder stage.
+COPY --from=builder /app/kaiterra_laser_egg_exporter /
 EXPOSE 9660
-ENTRYPOINT ["/root/kaiterra_laser_egg_exporter"]
+
+# Run the web service on container startup.
+ENTRYPOINT ["/kaiterra_laser_egg_exporter"]
