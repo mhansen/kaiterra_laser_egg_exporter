@@ -8,6 +8,24 @@ Get an API Key at https://dashboard.kaiterra.cn/.
 
 Find your device UUID in the Kaiterra app.
 
+Combine with Grafana for beautiful graphs:
+
+### Temperature over time:
+
+![Temperature graph over time](img/temperature.png)
+
+### Humidity over time:
+
+![Humidity graph over time](img/humidity.png)
+
+### Particulate Matter over time:
+
+![Particulate Matter (PM2.5 and PM10) graph over time](img/particulate_matter.png)
+
+### Staleness of data:
+
+![Latency Graph](img/particulate_matter.png)
+
 Example usage:
 
     $ go build
@@ -30,7 +48,7 @@ Example usage:
     kaiterra_timestamp_seconds 1.580291945e+09
 
 
-Example docker-compose.yml:
+Example `docker-compose.yml`:
 
     version: '3.4'
     services:
@@ -47,7 +65,7 @@ Example docker-compose.yml:
         volumes:
           - /etc/ssl/certs:/etc/ssl/certs:ro
 
-Example prometheus.yml:
+Example `prometheus.yml`:
 
     scrape_configs:
       - job_name: 'kaiterra'
