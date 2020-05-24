@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"flag"
+	"html/template"
 	"log"
 	"net/http"
 	"net/url"
@@ -24,6 +25,12 @@ var (
 		[]string{"microns"},
 		nil,
 	)
+
+	index = template.Must(template.New("index").Parse(
+		`<!doctype html>
+<title>Kaiterra Laser Egg Exporter</title>
+<h1>Kaiterra Laser Egg Exporter</h1>
+<a href="/metrics">Metrics</a>`))
 )
 
 func main() {
@@ -47,6 +54,13 @@ func main() {
 	)
 
 	http.Handle("/metrics", promhttp.HandlerFor(reg, promhttp.HandlerOpts{}))
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		err := index.Execute(w, nil)
+		if err != nil {
+			log.Println(err)
+		}
+	})
 	http.ListenAndServe(*addr, nil)
 }
 
