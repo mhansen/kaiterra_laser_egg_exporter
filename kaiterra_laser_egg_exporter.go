@@ -59,7 +59,7 @@ func (kc kaiterraCollector) Describe(ch chan<- *prometheus.Desc) {
 }
 
 func (kc kaiterraCollector) Collect(ch chan<- prometheus.Metric) {
-	req, err := http.NewRequest("GET", "https://api.kaiterra.cn/v1/lasereggs/", nil)
+	req, err := http.NewRequest("GET", "https://api.kaiterra.com/v1/lasereggs/", nil)
 	if err != nil {
 		panic(err)
 	}
@@ -136,20 +136,25 @@ func (kc kaiterraCollector) Collect(ch chan<- prometheus.Metric) {
 	)
 }
 
+// JSONResponse is the root JSON response from Kaiterra API.
+// https://www.kaiterra.com/dev/#overview
 type JSONResponse struct {
 	// 128-bit UUID, Device ID for Laser Egg
 	ID  string
 	AQI JSONAQI `json:"info.aqi"`
 }
 
+// JSONAQI is timestamped pollutant data.
 type JSONAQI struct {
 	// RFC3339 (a refinement of ISO8601), which looks like 2016-12-07T05:32:16Z
 	TS   string
-	Data JSONData
+	Data JSONPollutantData
 }
 
+// JSONPollutantData isData on various pollutants or other metrics (like
+// temperature and humidity).
 // https://www.kaiterra.com/dev/#header-pollutant-data
-type JSONData struct {
+type JSONPollutantData struct {
 	// Relative humidity in % (0-100)
 	Humidity float64
 	// PM10 (µg/m³), post-calibration
