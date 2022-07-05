@@ -148,6 +148,17 @@ func (kc kaiterraCollector) Collect(ch chan<- prometheus.Metric) {
 		prometheus.GaugeValue,
 		float64(t.Unix()),
 	)
+	ch <- prometheus.MustNewConstMetric(
+		prometheus.NewDesc(
+			"kaiterra_rtvoc",
+			"Total Volatile Organic Compounds (TVOC) in ppb",
+			[]string{},
+			nil,
+		),
+		prometheus.GaugeValue,
+		float64(decoded.AQI.Data.Rtvoc),
+	)
+
 }
 
 // JSONResponse is the root JSON response from Kaiterra API.
@@ -177,4 +188,6 @@ type JSONPollutantData struct {
 	PM25 float64
 	// Temperature in Celsius
 	Temp float64
+	// TVOC in ppb
+	Rtvoc float64  `json:"st03.rtvoc"`
 }
