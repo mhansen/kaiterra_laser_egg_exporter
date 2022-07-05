@@ -41,6 +41,9 @@ Example usage:
     # TYPE kaiterra_particulate_matter gauge
     kaiterra_particulate_matter{microns="10"} 16
     kaiterra_particulate_matter{microns="2.5"} 15
+    # HELP kaiterra_rtvoc Total Volatile Organic Compounds (TVOC) in ppb
+    # TYPE kaiterra_rtvoc gauge
+    kaiterra_rtvoc 486
     # HELP kaiterra_temperature_celsius temperature in Celsius
     # TYPE kaiterra_temperature_celsius gauge
     kaiterra_temperature_celsius 26.74
