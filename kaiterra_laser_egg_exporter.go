@@ -150,13 +150,13 @@ func (kc kaiterraCollector) Collect(ch chan<- prometheus.Metric) {
 	)
 	ch <- prometheus.MustNewConstMetric(
 		prometheus.NewDesc(
-			"kaiterra_rtvoc",
+			"kaiterra_total_volatile_organic_compounds_ppb",
 			"Total Volatile Organic Compounds (TVOC) in ppb",
 			[]string{},
 			nil,
 		),
 		prometheus.GaugeValue,
-		float64(decoded.AQI.Data.Rtvoc),
+		float64(decoded.AQI.Data.Tvoc),
 	)
 
 }
@@ -189,5 +189,5 @@ type JSONPollutantData struct {
 	// Temperature in Celsius
 	Temp float64
 	// TVOC in ppb
-	Rtvoc float64  `json:"st03.rtvoc"`
+	Tvoc float64  `json:"st03.rtvoc"`
 }
