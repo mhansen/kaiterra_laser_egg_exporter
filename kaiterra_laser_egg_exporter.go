@@ -148,16 +148,19 @@ func (kc kaiterraCollector) Collect(ch chan<- prometheus.Metric) {
 		prometheus.GaugeValue,
 		float64(t.Unix()),
 	)
-	ch <- prometheus.MustNewConstMetric(
-		prometheus.NewDesc(
-			"kaiterra_total_volatile_organic_compounds_ppb",
-			"Total Volatile Organic Compounds (TVOC) in ppb",
-			[]string{},
-			nil,
-		),
-		prometheus.GaugeValue,
-		float64(decoded.AQI.Data.Tvoc),
-	)
+	Tvoc := float64(decoded.AQI.Data.Tvoc)
+	if Tvoc != 0 {
+		ch <- prometheus.MustNewConstMetric(
+			prometheus.NewDesc(
+				"kaiterra_total_volatile_organic_compounds_ppb",
+				"Total Volatile Organic Compounds (TVOC) in ppb",
+				[]string{},
+				nil,
+			),
+			prometheus.GaugeValue,
+			float64(decoded.AQI.Data.Tvoc),
+		)
+	}
 
 }
 
