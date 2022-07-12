@@ -47,6 +47,9 @@ Example usage:
     # HELP kaiterra_timestamp_seconds Timestamp was measured at. Unix seconds.
     # TYPE kaiterra_timestamp_seconds gauge
     kaiterra_timestamp_seconds 1.580291945e+09
+    # HELP kaiterra_total_volatile_organic_compounds_ppb Total Volatile Organic Compounds (TVOC) in ppb
+    # TYPE kaiterra_total_volatile_organic_compounds_ppb gauge
+    kaiterra_total_volatile_organic_compounds_ppb 198
 ```
 
 
